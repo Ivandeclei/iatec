@@ -24,6 +24,19 @@ namespace Iatec
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "policyCors",
+                    policy =>
+                    {
+                        policy.WithOrigins("*")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                        
+                    });
+            });
+
             services.AddAutoMapper(typeof(WebApiMapperProfile),
                 typeof(IMapper));
 
@@ -103,6 +116,8 @@ namespace Iatec
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("policyCors");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
